@@ -48,6 +48,7 @@ parser.add_argument("-reportOpts", "--reportOptions", help="Options for report c
 def main():
 
     reportName = "Project Inventory License Audit Report"
+    auditField = "License"
 
     logger.info("Creating %s - %s" %(reportName, _version.__version__))
     print("Creating %s - %s" %(reportName, _version.__version__))
@@ -113,7 +114,7 @@ def main():
         reports = report_errors.create_error_report(reportData)
         print("    *** ERROR  ***  Error found validating report options")
     else:
-        reportData = report_data.gather_data_for_report(baseURL, projectID, authToken, reportName, reportOptions)
+        reportData = report_data.gather_data_for_report(baseURL, projectID, authToken, reportName, reportOptions, auditField)
         print("    Report data has been collected")
         projectName = reportData["projectName"]
         projectNameForFile = re.sub(r"[^a-zA-Z0-9]+", '-', projectName )  # Remove special characters from project name for artifacts
@@ -128,7 +129,6 @@ def main():
         reportData["reportTimeStamp"] = datetime.strptime(fileNameTimeStamp, "%Y%m%d-%H%M%S").strftime("%B %d, %Y at %H:%M:%S")
         reportData["reportFileNameBase"] = reportFileNameBase
 
-
         # Was there any errors while collection the report data?
         if "errorMsg" in reportData.keys():
             reports = report_errors.create_error_report(reportData)
@@ -136,7 +136,6 @@ def main():
         else:
             reports = report_artifacts.create_report_artifacts(reportData)
             print("    Report artifacts have been created")
-
 
 
 #----------------------------------------------------------------------# 
