@@ -20,7 +20,10 @@ def generate_html_report(reportData):
     logger.info("    Entering generate_html_report")
     reportName = reportData["reportName"]
     reportFileNameBase = reportData["reportFileNameBase"]
-    reportTimeStamp =  reportData["reportTimeStamp"] 
+    reportTimeStamp =  reportData["reportTimeStamp"]
+    projectList = reportData["projectList"] 
+
+    auditHistory = reportData["auditHistory"]
 
     scriptDirectory = os.path.dirname(os.path.realpath(__file__))
     cssFile =  os.path.join(scriptDirectory, "report_branding/css/revenera_common.css")
@@ -97,6 +100,43 @@ def generate_html_report(reportData):
     #---------------------------------------------------------------------------------------------------
     html_ptr.write("<!-- BEGIN BODY -->\n")  
 
+
+    html_ptr.write("<table id='auditData' class='table table-hover table-sm row-border' style='width:90%'>\n")
+    html_ptr.write("    <thead>\n")
+    html_ptr.write("        <tr>\n") 
+    if len(projectList) > 1:
+        html_ptr.write("            <th style='width: 15%' class='text-center'>PROJECT</th>\n") 
+    html_ptr.write("            <th style='width: 20%' class='text-center'>INVENTORY ITEM</th>\n")
+    html_ptr.write("            <th style='width: 10%' class='text-center'>DATE</th>\n")
+    html_ptr.write("            <th style='width: 15%' class='text-center'>USER</th>\n")
+    html_ptr.write("            <th style='width: 15%' class='text-center'>ORIGINAL VALUE</th>\n")   
+    html_ptr.write("            <th style='width: 15%' class='text-center'>NEW VALUE</th>\n") 
+    html_ptr.write("        </tr>\n")
+    html_ptr.write("    </thead>\n")  
+
+    html_ptr.write("    <tbody>\n")  
+
+    for inventoryItemID in auditHistory:
+        inventoryName =  auditHistory[inventoryItemID]["inventoryItemName"]
+        projectName = auditHistory[inventoryItemID]["project"]
+        
+        for eventID in auditHistory[inventoryItemID]["events"]:
+            html_ptr.write("<tr>")
+            event = auditHistory[inventoryItemID]["events"][eventID]
+            
+            if len(projectList) > 1:
+                html_ptr.write("<td style=\"vertical-align:middle\"><a href=\"%s\" target=\"_blank\">%s</a></td>\n" %("", projectName))
+
+            html_ptr.write("<td style=\"vertical-align:middle\"><a href=\"%s\" target=\"_blank\">%s</a></td>\n" %("", inventoryName))
+            html_ptr.write("<td style=\"vertical-align:middle\">%s</td>\n" %event["date"])
+            html_ptr.write("<td style=\"vertical-align:middle\">%s</td>\n" %event["user"])
+            html_ptr.write("<td style=\"vertical-align:middle\">%s</td>\n" %event["oldValue"])
+            html_ptr.write("<td style=\"vertical-align:middle\">%s</td>\n" %event["newValue"])
+            html_ptr.write("</tr>")
+
+    html_ptr.write("    </tbody>\n")
+    html_ptr.write("</table>\n")  
+
     html_ptr.write("<!-- END BODY -->\n")  
 
     #---------------------------------------------------------------------------------------------------
@@ -111,6 +151,43 @@ def generate_html_report(reportData):
     html_ptr.write("<!-- END FOOTER -->\n")   
 
     html_ptr.write("</div>\n")
+    #---------------------------------------------------------------------------------------------------
+    # Add javascript 
+    #---------------------------------------------------------------------------------------------------
+
+    html_ptr.write('''
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>  
+    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.10/jstree.min.js"></script> 
+    ''')
+
+    html_ptr.write("<script>\n")
+
+    html_ptr.write('''
+
+            $(document).ready(function (){
+                var table = $('#auditData').DataTable({
+                    "order": [[ 2, "asc" ]],
+                    "lengthMenu": [ [25, 50, 100, -1], [25, 50, 100, "All"] ],
+                });
+            });
+        ''')
+    
+
+    html_ptr.write("</script>\n")
+
+    html_ptr.write("</body>\n") 
+    html_ptr.write("</html>\n") 
+    html_ptr.close() 
+
+    logger.info("    Exiting generate_html_report")
+    return htmlFile
+
+
+
 
 ####################################################################
 def encodeImage(imageFile):
