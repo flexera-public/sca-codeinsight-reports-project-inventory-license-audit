@@ -118,16 +118,18 @@ def generate_html_report(reportData):
 
     for inventoryItemID in auditHistory:
         inventoryName =  auditHistory[inventoryItemID]["inventoryItemName"]
+        inventoryItemLink =  auditHistory[inventoryItemID]["inventoryItemLink"]
         projectName = auditHistory[inventoryItemID]["project"]
+        projectLink = auditHistory[inventoryItemID]["projectLink"]
         
         for eventID in auditHistory[inventoryItemID]["events"]:
             html_ptr.write("<tr>")
             event = auditHistory[inventoryItemID]["events"][eventID]
             
             if len(projectList) > 1:
-                html_ptr.write("<td style=\"vertical-align:middle\"><a href=\"%s\" target=\"_blank\">%s</a></td>\n" %("", projectName))
+                html_ptr.write("<td style=\"vertical-align:middle\"><a href=\"%s\" target=\"_blank\">%s</a></td>\n" %(projectLink, projectName))
 
-            html_ptr.write("<td style=\"vertical-align:middle\"><a href=\"%s\" target=\"_blank\">%s</a></td>\n" %("", inventoryName))
+            html_ptr.write("<td style=\"vertical-align:middle\"><a href=\"%s\" target=\"_blank\">%s</a></td>\n" %(inventoryItemLink, inventoryName))
             html_ptr.write("<td style=\"vertical-align:middle\">%s</td>\n" %event["date"])
             html_ptr.write("<td style=\"vertical-align:middle\">%s</td>\n" %event["user"])
             html_ptr.write("<td style=\"vertical-align:middle\">%s</td>\n" %event["oldValue"])

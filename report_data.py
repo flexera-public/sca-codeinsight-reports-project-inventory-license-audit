@@ -145,7 +145,10 @@ def gather_data_for_report(baseURL, projectID, authToken, reportName, reportOpti
 
                 auditHistory[inventoryID] = {}
                 auditHistory[inventoryID]["inventoryItemName"] = inventoryItemName
+                auditHistory[inventoryID]["inventoryItemLink"] = baseURL + '''/codeinsight/FNCI#myprojectdetails/?id=''' + str(projectID) + '''&tab=projectInventory&pinv=''' + str(inventoryID)
+
                 auditHistory[inventoryID]["project"] = projectName
+                auditHistory[inventoryID]["projectLink"] = projectLink
                 auditHistory[inventoryID]["events"] = inventoryAuditHistory
 
 
