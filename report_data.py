@@ -111,34 +111,35 @@ def gather_data_for_report(baseURL, projectID, authToken, reportName, reportOpti
                         oldLicenseID  = action["oldValue"]
                         newLicenseID = action["newValue"]
 
+                        # Is there a mapping for the old license ID?
                         if oldLicenseID in licenseMappings:
-                            inventoryAuditHistory[eventID]["oldValue"] = licenseMappings[oldLicenseID]
+                           licenseName = licenseMappings[oldLicenseID]
                         else:
                             licenseDetails = CodeInsight_RESTAPIs.license.license_lookup.get_license_details(baseURL, oldLicenseID, authToken) 
+
                             spdxIdentifier = licenseDetails["spdxIdentifier"]
-                            if spdxIdentifier != "":
+                            if spdxIdentifier != "" and spdxIdentifier != "N/A":
                                 licenseName = spdxIdentifier
                             else:
                                 licenseName = licenseDetails["shortName"]
-                            
-                            licenseMappings[oldLicenseID] = licenseName
-                            inventoryAuditHistory[eventID]["oldValue"] = licenseName        
+                                licenseMappings[oldLicenseID] = licenseName
+                        
+                        inventoryAuditHistory[eventID]["oldValue"] = licenseName       
 
-
+                        # Is there a mapping for the new license ID?
                         if newLicenseID in licenseMappings:
-                            inventoryAuditHistory[eventID]["newValue"] = licenseMappings[newLicenseID]
+                            licenseName= licenseMappings[newLicenseID]
                         else:
                             licenseDetails = CodeInsight_RESTAPIs.license.license_lookup.get_license_details(baseURL, newLicenseID, authToken) 
+
                             spdxIdentifier = licenseDetails["spdxIdentifier"]
-                            if spdxIdentifier != "":
+                            if spdxIdentifier != "" and spdxIdentifier != "N/A":
                                 licenseName = spdxIdentifier
                             else:
-                                licenseName = licenseDetails["shortName"]
-                            
-                            licenseMappings[newLicenseID] = licenseName 
-                            inventoryAuditHistory[eventID]["newValue"] = licenseName                        
-
-
+                                licenseName = licenseDetails["shortName"]   
+                                licenseMappings[newLicenseID] = licenseName 
+                        
+                        inventoryAuditHistory[eventID]["newValue"] = licenseName    
 
             # Was there at least one licnse change for this inventory item>
             if reportableEvent:
