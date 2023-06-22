@@ -8,6 +8,7 @@ Created On : Wed Jun 21 2023
 File : report_data.py
 '''
 import logging
+import restricted_licenses
 
 import CodeInsight_RESTAPIs.project.get_child_projects
 import CodeInsight_RESTAPIs.project.get_inventory_summary
@@ -99,47 +100,48 @@ def gather_data_for_report(baseURL, projectID, authToken, reportName, reportOpti
         
                 for action in inventoryChangeEvent:
                     if auditField in action["field"]:
+                        if action["oldValue"] in restricted_licenses.restrictedLicenses:
 
-                        # since this is an event we care about we need to capture the details for this inventory item
-                        reportableEvent = True
-                        inventoryAuditHistory[eventID] = {}
-                        inventoryAuditHistory[eventID]["date"] = action["date"]
-                        inventoryAuditHistory[eventID]["user"] = action["user"]
-                        inventoryAuditHistory[eventID]["userEmail"] = action["userEmail"]
-                        
-                        # Specific for license events we need to map the license IDs to license names
-                        oldLicenseID  = action["oldValue"]
-                        newLicenseID = action["newValue"]
+                            # since this is an event we care about we need to capture the details for this inventory item
+                            reportableEvent = True
+                            inventoryAuditHistory[eventID] = {}
+                            inventoryAuditHistory[eventID]["date"] = action["date"]
+                            inventoryAuditHistory[eventID]["user"] = action["user"]
+                            inventoryAuditHistory[eventID]["userEmail"] = action["userEmail"]
+                            
+                            # Specific for license events we need to map the license IDs to license names
+                            oldLicenseID  = action["oldValue"]
+                            newLicenseID = action["newValue"]
 
-                        # Is there a mapping for the old license ID?
-                        if oldLicenseID in licenseMappings:
-                           licenseName = licenseMappings[oldLicenseID]
-                        else:
-                            licenseDetails = CodeInsight_RESTAPIs.license.license_lookup.get_license_details(baseURL, oldLicenseID, authToken) 
-
-                            spdxIdentifier = licenseDetails["spdxIdentifier"]
-                            if spdxIdentifier != "" and spdxIdentifier != "N/A":
-                                licenseName = spdxIdentifier
+                            # Is there a mapping for the old license ID?
+                            if oldLicenseID in licenseMappings:
+                                licenseName = licenseMappings[oldLicenseID]
                             else:
-                                licenseName = licenseDetails["shortName"]
-                                licenseMappings[oldLicenseID] = licenseName
-                        
-                        inventoryAuditHistory[eventID]["oldValue"] = licenseName       
+                                licenseDetails = CodeInsight_RESTAPIs.license.license_lookup.get_license_details(baseURL, oldLicenseID, authToken) 
 
-                        # Is there a mapping for the new license ID?
-                        if newLicenseID in licenseMappings:
-                            licenseName= licenseMappings[newLicenseID]
-                        else:
-                            licenseDetails = CodeInsight_RESTAPIs.license.license_lookup.get_license_details(baseURL, newLicenseID, authToken) 
+                                spdxIdentifier = licenseDetails["spdxIdentifier"]
+                                if spdxIdentifier != "" and spdxIdentifier != "N/A":
+                                    licenseName = spdxIdentifier
+                                else:
+                                    licenseName = licenseDetails["shortName"]
+                                    licenseMappings[oldLicenseID] = licenseName
+                            
+                            inventoryAuditHistory[eventID]["oldValue"] = licenseName       
 
-                            spdxIdentifier = licenseDetails["spdxIdentifier"]
-                            if spdxIdentifier != "" and spdxIdentifier != "N/A":
-                                licenseName = spdxIdentifier
+                            # Is there a mapping for the new license ID?
+                            if newLicenseID in licenseMappings:
+                                licenseName= licenseMappings[newLicenseID]
                             else:
-                                licenseName = licenseDetails["shortName"]   
-                                licenseMappings[newLicenseID] = licenseName 
-                        
-                        inventoryAuditHistory[eventID]["newValue"] = licenseName    
+                                licenseDetails = CodeInsight_RESTAPIs.license.license_lookup.get_license_details(baseURL, newLicenseID, authToken) 
+
+                                spdxIdentifier = licenseDetails["spdxIdentifier"]
+                                if spdxIdentifier != "" and spdxIdentifier != "N/A":
+                                    licenseName = spdxIdentifier
+                                else:
+                                    licenseName = licenseDetails["shortName"]   
+                                    licenseMappings[newLicenseID] = licenseName 
+                            
+                            inventoryAuditHistory[eventID]["newValue"] = licenseName    
 
             # Was there at least one licnse change for this inventory item>
             if reportableEvent:
@@ -151,10 +153,6 @@ def gather_data_for_report(baseURL, projectID, authToken, reportName, reportOpti
                 auditHistory[inventoryID]["project"] = projectName
                 auditHistory[inventoryID]["projectLink"] = projectLink
                 auditHistory[inventoryID]["events"] = inventoryAuditHistory
-
-
-
-
 
     # Build up the data to return for the
     reportData = {}
