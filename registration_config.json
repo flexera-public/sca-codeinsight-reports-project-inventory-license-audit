@@ -1,0 +1,16 @@
+{
+    "reportName" : "Project Inventory License Audit Report",
+    "enableProjectPickerValue" : "false",
+    "reportOptions" : {
+        "option1" : 
+        {
+            "name" : "includeChildProjects",
+            "label" : "Include child project data? (True/False)",
+            "description" : "Should the report include data from child projects? <b>(True/False)</b>",
+            "type" : "string",
+            "defaultValue" : "True",
+            "required" : "true",
+            "order" : "1"
+        }
+    }
+}
