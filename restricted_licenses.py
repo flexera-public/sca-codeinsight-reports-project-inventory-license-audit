@@ -24,6 +24,6 @@ restrictedLicenses["343"] = "GNU General Public License v1.0 only (GPL-1.0-only)
 restrictedLicenses["698"] = "GNU General Public License v1.0 or later (GPL-1.0-or-later)"
 restrictedLicenses["331"] = "GNU General Public License v2.0 only (GPL-2.0-only)"
 restrictedLicenses["699"] = "GNU General Public License v2.0 or later (GPL-2.0-or-later)"
-restrictedLicenses["1097"] = "GNU General Public License v3.0 only (GPL-3.0-only)"
+restrictedLicenses["197"] = "GNU General Public License v3.0 only (GPL-3.0-only)"
 restrictedLicenses["702"] = "GNU General Public License v3.0 or later (GPL-3.0-or-later)"
 
