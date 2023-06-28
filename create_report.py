@@ -151,28 +151,36 @@ def main():
 
 #----------------------------------------------------------------------# 
 def verifyOptions(reportOptions):
-	'''
-	Expected Options for report:
-		includeChildProjects - True/False
-	'''
-	reportOptions["errorMsg"] = []
-	trueOptions = ["true", "t", "yes", "y"]
-	falseOptions = ["false", "f", "no", "n"]
+    '''
+    Expected Options for report:
+        includeChildProjects - True/False
+        onlyRestrictedLicenses - True/False
+    '''
+    reportOptions["errorMsg"] = []
+    trueOptions = ["true", "t", "yes", "y"]
+    falseOptions = ["false", "f", "no", "n"]
 
-	includeChildProjects = reportOptions["includeChildProjects"]
+    includeChildProjects = reportOptions["includeChildProjects"]
+    restrictedLicensesOnly = reportOptions["restrictedLicensesOnly"]
 
-	if includeChildProjects.lower() in trueOptions:
-		reportOptions["includeChildProjects"] = True
-	elif includeChildProjects.lower() in falseOptions:
-		reportOptions["includeChildProjects"] = False
-	else:
-		reportOptions["errorMsg"].append("Invalid option for including child projects: <b>%s</b>.  Valid options are <b>True/False</b>" %includeChildProjects)
-    
+    if includeChildProjects.lower() in trueOptions:
+        reportOptions["includeChildProjects"] = True
+    elif includeChildProjects.lower() in falseOptions:
+        reportOptions["includeChildProjects"] = False
+    else:
+        reportOptions["errorMsg"].append("Invalid option for including child projects: <b>%s</b>.  Valid options are <b>True/False</b>" %includeChildProjects)
 
-	if not reportOptions["errorMsg"]:
-		reportOptions.pop('errorMsg', None)
+    if restrictedLicensesOnly.lower() in trueOptions:
+        reportOptions["restrictedLicensesOnly"] = True
+    elif restrictedLicensesOnly.lower() in falseOptions:
+        reportOptions["restrictedLicensesOnly"] = False
+    else:
+        reportOptions["errorMsg"].append("Invalid option for restricted license option: <b>%s</b>.  Valid options are <b>True/False</b>" %restrictedLicensesOnly)
 
-	return reportOptions
+    if not reportOptions["errorMsg"]:
+        reportOptions.pop('errorMsg', None)
+
+    return reportOptions
 
 #---------------------------------------------------------------------#
 def create_report_zipfile(reportOutputs, reportFileNameBase):

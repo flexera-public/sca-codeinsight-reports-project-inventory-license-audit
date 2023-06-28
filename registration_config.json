@@ -11,6 +11,16 @@
             "defaultValue" : "True",
             "required" : "true",
             "order" : "1"
-        }
+        },
+        "option2" : 
+        {
+            "name" : "restrictedLicensesOnly",
+            "label" : "Limit the report to just restricted licenses? (True/False)",
+            "description" : "Should the report include only changes from licenses outlined in the restricted_license.py file or all changes? <b>(True/False)</b>",
+            "type" : "string",
+            "defaultValue" : "False",
+            "required" : "true",
+            "order" : "2"
+        } 
     }
 }

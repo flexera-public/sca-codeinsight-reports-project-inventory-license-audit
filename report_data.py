@@ -28,6 +28,7 @@ def gather_data_for_report(baseURL, projectID, authToken, reportName, reportOpti
 
     # Parse report options
     includeChildProjects = reportOptions["includeChildProjects"]  # True/False
+    restrictedLicensesOnly = reportOptions["onlyRestrictedLicenses"]  # True/False
 
     projectList = [] # List to hold parent/child details for report
     projectData = {} # Create a dictionary containing the project level summary data using projectID as keys
@@ -100,7 +101,8 @@ def gather_data_for_report(baseURL, projectID, authToken, reportName, reportOpti
         
                 for action in inventoryChangeEvent:
                     if auditField in action["field"]:
-                        if action["oldValue"] in restricted_licenses.restrictedLicenses:
+
+                        if restrictedLicensesOnly and action["oldValue"] in restricted_licenses.restrictedLicenses or not restrictedLicensesOnly:
 
                             # since this is an event we care about we need to capture the details for this inventory item
                             reportableEvent = True

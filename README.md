@@ -82,6 +82,7 @@ This report is executed directly from within Revenera's Code Insight product. Fr
 The following report options can be set once the report generation has been initiated:
 
 - Including child projects (True/False) - Determine if child project data will be included or not.
+- Report for restricted license only (True/False) - Determine if all licnese changes will be report or just those then went from a restricted value to another license.
 
 The Code Insight Custom Report Framework will provide the following to the custom report when initiated:
 
