@@ -28,7 +28,7 @@ def gather_data_for_report(baseURL, projectID, authToken, reportName, reportOpti
 
     # Parse report options
     includeChildProjects = reportOptions["includeChildProjects"]  # True/False
-    restrictedLicensesOnly = reportOptions["onlyRestrictedLicenses"]  # True/False
+    restrictedLicensesOnly = reportOptions["restrictedLicensesOnly"]  # True/False
 
     projectList = [] # List to hold parent/child details for report
     projectData = {} # Create a dictionary containing the project level summary data using projectID as keys
