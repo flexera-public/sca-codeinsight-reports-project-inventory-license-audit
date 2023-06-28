@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2023-06-28
+### Added
+- Provide option to report on all licnese changes or just restricted license
+
 ## [1.0.1] - 2023-06-22
 ### Added
 - Initial public release of project inventory license audit report
