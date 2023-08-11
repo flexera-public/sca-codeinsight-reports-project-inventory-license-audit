@@ -20,8 +20,8 @@ import CodeInsight_RESTAPIs.project.upload_reports
 ###################################################################################
 # Test the version of python to make sure it's at least the version the script
 # was tested on, otherwise there could be unexpected results
-if sys.version_info <= (3, 7):
-    raise Exception("The current version of Python is less than 3.5 which is unsupported.\n Script created/tested against python version 3.10.5. ")
+if sys.version_info <= (3, 6):
+    raise Exception("The current version of Python is less than 3.6 which is unsupported.\n Script created/tested against python version 3.6.8. ")
 else:
     pass
 
